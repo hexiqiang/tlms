@@ -1,0 +1,199 @@
+import 'package:flutter/material.dart';
+import 'package:tlms/common/Common.dart';
+import 'package:tlms/data/DataClass.dart';
+
+class LoadingCarDesc extends StatefulWidget{
+
+  const LoadingCarDesc({super.key});
+  _LoadingCarDesc createState() => _LoadingCarDesc();
+}
+
+class _LoadingCarDesc extends State<LoadingCarDesc>{
+
+  @override
+  Widget build(BuildContext context){
+    final CountCode countCode;
+    final CountCodeDesc countCodeDesc;
+    if(ModalRoute.of(context)?.settings.arguments != null){
+      countCode = ModalRoute.of(context)?.settings.arguments as CountCode;
+    }else{
+      countCode = CountCode(number: "", total: 0, count: 0, code: 0, msg: "");
+      countCodeDesc = CountCodeDesc(EANnumber: "!231423", ItemNumber: "#325", OuterBoxNumber: "534523", CarTotal: 1, NoCount: 1, code: 1, msg: "success");
+    }
+    return Scaffold(
+      body: Column(
+        children: [
+          InkWell(
+            onTap: (){
+              Navigator.pushNamed(context, "/scan/sscc");
+            },
+            child: Container(
+              margin: EdgeInsets.all(8),
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(4),
+                color: Colors.white,
+              ),
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Column(
+                      children: [
+                        SizedBox(
+                          height: 30,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("条码号：${countCode.number}"),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("订舱总件数：${countCode.total}"),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("未扫描数量：${countCode.count}"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: (){
+              Navigator.pushNamed(context, "/scan/sscc");
+            },
+            child: Container(
+              margin: EdgeInsets.all(8),
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(4),
+                color: Colors.white,
+              ),
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Column(
+                      children: [
+                        SizedBox(
+                          height: 30,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("EAN条码：${countCode.number}"),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("外箱款号：${countCode.total}"),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("外箱货号：${countCode.count}"),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("订舱总件数：${countCode.count}"),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("未扫描：${countCode.count}"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        shadowColor: Colors.white,
+        height: 80,
+        notchMargin: 0,
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Row(
+            verticalDirection: VerticalDirection.down,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Align(
+                    child: SizedBox(
+                      width: 300,
+                      height: 80,
+                      child:
+                      Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(4),
+                          color: Color(0xFF3fd550),
+                        ),
+                        child: TextButton(
+                          child: Text(
+                            "完成扫描",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () {
+                            // Action here
+                          },
+                        ),
+                      ),
+                    ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
