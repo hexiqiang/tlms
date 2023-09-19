@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tlms/api/Api.dart';
 import 'package:tlms/data/DataClass.dart';
 
+
+
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
   _LoginView createState() =>_LoginView();
@@ -32,7 +34,6 @@ class _LoginView extends State<LoginView>{
 
   //保存数据
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
   @override
   void initState() {
     // TODO: implement initState
@@ -235,6 +236,7 @@ class _LoginView extends State<LoginView>{
     var response = await Api.login("/login/login", params);
 
     if (response['code'] == 0){
+
       EasyLoading.showSuccess("登录成功");
       Future.delayed(const Duration(seconds: 1), () {
         //  关闭指示器
@@ -244,7 +246,12 @@ class _LoginView extends State<LoginView>{
           //  关闭指示器
           EasyLoading.dismiss();
           print(response['data']);
-          UserData userData = UserData(id: response['data']['id'], rid: response['data']['rid'], username: response['data']['username'], nickname: response['data']['nickname']);
+          UserData userData = UserData(
+              id: response['data']['id'],
+              rid: response['data']['rid'],
+              username: response['data']['username'],
+              nickname: response['data']['nickname']
+          );
           Navigator.pushNamed(context, "/home",  arguments: userData);
         });
       });
@@ -252,6 +259,8 @@ class _LoginView extends State<LoginView>{
 
     }
   }
+
+
 
 
   //从缓存中获取信息填充

@@ -19,13 +19,6 @@ class _LayoutHeader extends State<LayoutHeader>{
         automaticallyImplyLeading: widget.back,
         backgroundColor: Color(0xFF3fd550),
         centerTitle: true,
-        leading: IconButton(
-          color: Colors.white,
-          onPressed: (){
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_ios),
-        ),
         title: Text(widget.title, style: TextStyle(color: Colors.white),),
       ),
     );

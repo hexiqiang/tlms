@@ -72,3 +72,13 @@ class UserData{
 
   UserData({required this.id, required this.rid, required this.username, required this.nickname});
 }
+
+class ColumnData{
+  final String name;
+  final String action;
+  final String url;
+  final String background;
+  final String icon;
+  ColumnData({required this.name, required this.action, required this.url, required this.background, required this.icon});
+}
+
