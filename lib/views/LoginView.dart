@@ -14,7 +14,11 @@ class LoginView extends StatefulWidget {
 class _LoginView extends State<LoginView>{
   String wl = "物流商";
   String ol = "";
+  String nickname = "";
   bool selected = false;
+  int id = 0;
+  int rid = 0;
+
   var usercontroller = TextEditingController();
   var pwdcontroller = TextEditingController();
 
@@ -34,6 +38,8 @@ class _LoginView extends State<LoginView>{
 
   //保存数据
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  
   @override
   void initState() {
     // TODO: implement initState
@@ -80,7 +86,6 @@ class _LoginView extends State<LoginView>{
                       ),
                       onSaved: (val){
                         username = val;
-                        saveInfo("_username", username);
                       },
                     ),
 
@@ -98,7 +103,6 @@ class _LoginView extends State<LoginView>{
                       obscureText: true,
                       onSaved: (val){
                         passwd = val;
-                        saveInfo("_passwd", passwd);
                       },
                     ),
                     SizedBox(height: 16),
@@ -187,7 +191,6 @@ class _LoginView extends State<LoginView>{
                       setState(() {
                         wl=ol;
                       });
-                      saveInfo("_ol", ol);
                     },
                     child: Text('确定', style: TextStyle(color: Colors.black, fontSize: 16)),
                   ),
@@ -236,7 +239,10 @@ class _LoginView extends State<LoginView>{
     var response = await Api.login("/login/login", params);
 
     if (response['code'] == 0){
-
+      nickname = response['data']['nickname'];
+      id = response['data']['id'];
+      rid = response['data']['rid'];
+      saveInfo();
       EasyLoading.showSuccess("登录成功");
       Future.delayed(const Duration(seconds: 1), () {
         //  关闭指示器
@@ -264,7 +270,7 @@ class _LoginView extends State<LoginView>{
 
 
   //从缓存中获取信息填充
-  void initFromCache() async {
+  Future<void> initFromCache() async {
     //获取SharedPreferences对象
     final SharedPreferences prefs = await _prefs;
     //根据键（key）获取本地存储的值（value）
@@ -282,8 +288,14 @@ class _LoginView extends State<LoginView>{
   }
 
   //保存界面的输入选择信息
-  void saveInfo(String key, String val)  async{
+  Future<void> saveInfo()  async{
     final SharedPreferences prefs=await _prefs;
-    prefs.setString(key, val);
+    await prefs.setString('username', username);
+    await prefs.setString('passwd', passwd);
+    await prefs.setString('nickname', nickname);
+    await prefs.setInt('id', id);
+    await prefs.setInt('rid', rid);
+    await prefs.setString('ol', ol);
+    await prefs.setBool('isLoggedIn', true);
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tlms/api/Api.dart';
 import 'package:tlms/data/DataClass.dart';
 
@@ -44,17 +45,29 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
   List<dynamic> column = [];
 
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    initFromCache();
   }
+
+
+
+  //保存数据
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  String nickname = "";
+  String username = "";
+  bool isLoggedIn = true;
+  int id = 0;
+  int rid = 0;
 
   @override
   Widget build(BuildContext context) {
     this._getColumn();
-    UserData userData = UserData(id: 0, rid: 0, username: "", nickname: "");
-    if (ModalRoute.of(context)?.settings.arguments != null) {
+    UserData userData = UserData(id: id, rid: rid, username: username, nickname: nickname);
+    if (isLoggedIn) {
       userData = ModalRoute.of(context)?.settings.arguments as UserData;
     } else {
       Navigator.pop(context);
@@ -95,13 +108,14 @@ class _HomePage extends State<HomePage> {
           radius: 26,
           child: Icon(Icons.person, size: 42, color: Color(0xFF3fd542)),
         ),
-        title: Text("${userData.nickname}"),
+        title: Text("${nickname}"),
         trailing: TextButton(
           child: Text(
             "退出",
             style: TextStyle(color: Colors.black),
           ),
           onPressed: () {
+            this.isLoggedIn = false;
             Navigator.pop(context);
           },
         ),
@@ -197,5 +211,26 @@ class _HomePage extends State<HomePage> {
   Future<dynamic> _getColumn() async {
     var response = await Api.getColumn("/column/getcolumn", {});
     if (response['code'] == 0) this.column = response['data'];
+  }
+
+  //从缓存中获取信息填充
+  Future<void> initFromCache() async {
+    //获取SharedPreferences对象
+    final SharedPreferences prefs = await _prefs;
+    //根据键（key）获取本地存储的值（value）
+    final _nickname = prefs.getString("nickname");
+    final _username = prefs.getString("username");
+    final _isLoggedIn = prefs.getBool("isLoggedIn");
+    final _id = prefs.getInt("id");
+    final _rid = prefs.getInt("rid");
+    print(_isLoggedIn);
+    //获取到缓存中的值后，使用setState更新界面信息
+    setState(() {
+      this.nickname = (_nickname == null ? "" : _nickname);
+      this.username = (_username == null ? "" : _username);
+      this.isLoggedIn = (_isLoggedIn == false ? false : true);
+      this.id = (_id == null ? 0 : _id);
+      this.rid = (_rid == null ? 0 : _rid);
+    });
   }
 }
