@@ -46,15 +46,6 @@ class _HomePage extends State<HomePage> {
   List<dynamic> column = [];
 
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    initFromCache();
-  }
-
-
-
   //保存数据
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   String nickname = "";
@@ -63,10 +54,25 @@ class _HomePage extends State<HomePage> {
   int id = 0;
   int rid = 0;
 
+
+  UserData userData = UserData(id: 0, rid: 0, username: "", nickname: "");
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initFromCache();
+    userData = UserData(id: id, rid: rid, username: username, nickname: nickname);
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     this._getColumn();
-    UserData userData = UserData(id: id, rid: rid, username: username, nickname: nickname);
+
     if (isLoggedIn) {
       userData = ModalRoute.of(context)?.settings.arguments as UserData;
     } else {
@@ -195,7 +201,7 @@ class _HomePage extends State<HomePage> {
     var result = await BarcodeScanner.scan(options: options);
     String qrcode = result.rawContent;
     if (qrcode == '') {
-      Navigator.pop(context);
+      Navigator.pushNamed(context, "/home", arguments: userData);
     }else{
       var data;
 
